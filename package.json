@@ -13,6 +13,7 @@
     "@kinde-oss/kinde-auth-nextjs": "^2.2.3",
     "@nextui-org/react": "^2.2.10",
     "@prisma/client": "^5.12.1",
+    "@supabase/supabase-js": "^2.42.5",
     "framer-motion": "^11.0.28",
     "next": "14.2.1",
     "prisma": "^5.12.1",

@@ -1,14 +1,20 @@
 'use client'
 
 import FileInput from '@/app/components/fileUpload';
+import { updateUserAvatar } from '@/app/lib/actions/user';
+import { uploadAvatar } from '@/app/lib/upload';
 import { PencilIcon } from '@heroicons/react/16/solid'
 import { Button, Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 
-const UploadAvatar = () => {
+const UploadAvatar = ({userId}:{userId:string}) => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [image,setImage]=useState<File>();
-    
+    const [isSubmitting,setIsSubmitting]=useState(false);
+
+    const router=useRouter();
+
     return (
         <div>
             <button onClick={onOpen}>
@@ -28,7 +34,19 @@ const UploadAvatar = () => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button isLoading={isSubmitting} color="primary" onPress={async()=>{
+                    setIsSubmitting(true);
+                    if(!image){
+                        onClose();
+                        return;
+                    }
+
+                    const avatarUrl=await uploadAvatar(image);
+                    const result=await updateUserAvatar(avatarUrl,userId);
+                    router.refresh();
+                    setIsSubmitting(false);
+                    onClose();
+                }}>
                   Change Avatar
                 </Button>
               </ModalFooter>
