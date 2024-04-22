@@ -8,7 +8,6 @@ export async function uploadAvatar(image:File) {
     const supabase=createClient(supabaseUrl,supabaseKey);
 
     const data=await supabase.storage.from("avatars").upload(`${image.name}_${Date.now()}`,image);
-
     const urlData=await supabase.storage.from("avatars").getPublicUrl(data.data?.path!);
 
     return urlData.data.publicUrl;
