@@ -29,7 +29,7 @@ const UserProfilePanel = ({user}:Props) => {
                 <Link href="/user/profile">Profile</Link>
             </DropdownItem>
             <DropdownItem>
-                <Link href="/user/properties">Properties</Link>
+                <Link href="/user/topics">Topics</Link>
             </DropdownItem>
           <DropdownItem key="logout" color="danger">
             <LogoutLink>Log Out</LogoutLink>
