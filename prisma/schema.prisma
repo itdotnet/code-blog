@@ -10,11 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id String @id
+model User {
+  id        String   @id
   firstName String
-  lastName String
-  email String
+  lastName  String
+  email     String
   avatarUrl String?
   createdAt DateTime @default(now())
+  Blog      Blog[]
+}
+
+model Blog {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  url             String
+  metaDescription String
+  cover           String
+  status          Boolean
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  typeId          Int
+  type            BlogType @relation(fields: [typeId], references: [id])
+}
+
+model BlogType {
+  id    Int    @id @default(autoincrement())
+  value String
+  Blog  Blog[]
 }

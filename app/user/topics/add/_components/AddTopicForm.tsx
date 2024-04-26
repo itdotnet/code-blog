@@ -3,33 +3,42 @@
 import React, { useState } from 'react'
 import Stepper from './Stepper'
 import { Button } from '@nextui-org/react'
+import Basic from './basic'
+import { BlogType } from '@prisma/client'
 
-const steps=[
+const steps = [
     {
-        label:"Basic"
+        label: "Basic"
     },
     {
-        label:"Cover"
+        label: "Cover"
     },
     {
-        label:"Seo"
+        label: "Seo"
     },
     {
-        label:"Categories"
+        label: "Categories"
     },
     {
-        label:"Tags"
+        label: "Tags"
     }
 ]
 
-const AddTopicForm = () => {
-    const [step,setStep]=useState(0);
+interface Props {
+    types: BlogType[]
+}
 
-  return (
-    <div>
-        <Stepper items={steps} activeItem={step} setActiveItem={setStep} />
-    </div>
-  )
+const AddTopicForm = (props: Props) => {
+    const [step, setStep] = useState(0);
+
+    return (
+        <div>
+            <Stepper items={steps} activeItem={step} setActiveItem={setStep} />
+            <form className='mt-3 p-2'>
+                <Basic types={props.types}></Basic>
+            </form>
+        </div>
+    )
 }
 
 export default AddTopicForm
