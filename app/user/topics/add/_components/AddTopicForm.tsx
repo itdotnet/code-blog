@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Stepper from './Stepper'
-import { Button } from '@nextui-org/react'
+import { Button, cn } from '@nextui-org/react'
 import Basic from './basic'
 import { BlogType } from '@prisma/client'
 
@@ -35,7 +35,7 @@ const AddTopicForm = (props: Props) => {
         <div>
             <Stepper items={steps} activeItem={step} setActiveItem={setStep} />
             <form className='mt-3 p-2'>
-                <Basic types={props.types}></Basic>
+                <Basic className={cn({'hidden':step!=0})} types={props.types} next={()=>setStep(prev=>prev + 1)}></Basic>
             </form>
         </div>
     )
