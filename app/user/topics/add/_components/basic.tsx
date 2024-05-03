@@ -1,19 +1,21 @@
-import { Button, Card, cn, Input, Select, SelectItem } from '@nextui-org/react'
+import { Button, Card, cn, Input, Select, SelectItem, Image } from '@nextui-org/react'
 import { BlogType } from '@prisma/client'
 import { Editor } from '@tinymce/tinymce-react'
 import { Editor as TinyMCEEditor } from 'tinymce';
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
+import FileInput from '@/app/components/fileUpload';
 
 interface Props {
   className?: string
   types: BlogType[]
-  next:()=>void
+  next: () => void
 }
 
 const Basic = (props: Props) => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  const handleNext=()=>props.next();
+  const handleNext = () => props.next();
+  const [image, setImage] = useState<File>();
 
   return (
     <Card className={cn("p-2 grid grid-cols-1 md:grid-cols-3 gap-3", props.className)}>
@@ -40,17 +42,21 @@ const Basic = (props: Props) => {
         />
       </div>
       <Select label="Type" selectionMode='single'>
-        {props.types.map((item)=>(
+        {props.types.map((item) => (
           <SelectItem key={item.id} value={item.value}>{item.value}</SelectItem>
         ))}
       </Select>
       <Select label="Status" selectionMode='single'>
-          <SelectItem key={0} value={0}>{'Draft'}</SelectItem>
-          <SelectItem key={1} value={1}>{'Release'}</SelectItem>
+        <SelectItem key={0} value={0}>{'Draft'}</SelectItem>
+        <SelectItem key={1} value={1}>{'Release'}</SelectItem>
       </Select>
+      <div className='md:col-span-3 flex flex-col'>
+        <FileInput onChange={(e) => setImage((e as any).target.files[0])} lablText='Cover' />
+        {image && <Image src={URL.createObjectURL(image)} width={200} height={200}/>}
+      </div>
       <div className='flex justify-center col-span-3 gap-3'>
-        <Button isDisabled color='primary' className='w-36' startContent={<ChevronLeftIcon className='w-6'/>}>Previous</Button>
-        <Button color='primary' className='w-36' endContent={<ChevronRightIcon className='w-6'/>} onClick={handleNext}>Next</Button>
+        <Button isDisabled color='primary' className='w-36' startContent={<ChevronLeftIcon className='w-6' />}>Previous</Button>
+        <Button color='primary' className='w-36' endContent={<ChevronRightIcon className='w-6' />} onClick={handleNext}>Next</Button>
       </div>
     </Card>
   )

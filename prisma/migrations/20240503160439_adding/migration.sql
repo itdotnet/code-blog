@@ -1,0 +1,7 @@
+-- CreateTable
+CREATE TABLE "BlogImage" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "url" TEXT NOT NULL,
+    "blogId" INTEGER NOT NULL,
+    CONSTRAINT "BlogImage_blogId_fkey" FOREIGN KEY ("blogId") REFERENCES "Blog" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
