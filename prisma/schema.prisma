@@ -21,7 +21,7 @@ model User {
 }
 
 model Blog {
-  id              Int         @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   title           String
   description     String
   url             String
@@ -29,10 +29,34 @@ model Blog {
   cover           String
   status          Boolean
   userId          String
-  user            User        @relation(fields: [userId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
   typeId          Int
-  type            BlogType    @relation(fields: [typeId], references: [id])
-  images       BlogImage[]
+  type            BlogType     @relation(fields: [typeId], references: [id])
+  images          BlogImage[]
+  categoryId      Int
+  category        BlogCategory  @relation(fields: [categoryId],references: [id])
+  tags            TagsOnBlog[]
+}
+
+model BlogCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+  blog Blog[]
+}
+
+model BlogTag {
+  id         Int          @id @default(autoincrement())
+  name       String
+  blogs TagsOnBlog[]
+}
+
+model TagsOnBlog {
+  blog   Blog    @relation(fields: [blogId], references: [id])
+  blogId Int
+  tag    BlogTag @relation(fields: [tagId], references: [id])
+  tagId  Int
+
+  @@id([blogId,tagId])
 }
 
 model BlogImage {
