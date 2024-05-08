@@ -4,9 +4,10 @@ import React, { useState } from 'react'
 import Stepper from './Stepper'
 import { Button, cn } from '@nextui-org/react'
 import Basic from './basic'
-import { BlogType } from '@prisma/client'
+import { BlogTag, BlogType } from '@prisma/client'
 import Picture from './Picture'
 import Seo from './Seo'
+import Tag from './Tag'
 
 const steps = [
     {
@@ -19,15 +20,13 @@ const steps = [
         label: "Seo"
     },
     {
-        label: "Categories"
-    },
-    {
         label: "Tags"
     }
 ]
 
 interface Props {
-    types: BlogType[]
+    types: BlogType[];
+    tags:BlogTag[];
 }
 
 const AddTopicForm = (props: Props) => {
@@ -43,6 +42,7 @@ const AddTopicForm = (props: Props) => {
                     prev={() => setStep(prev => prev - 1)} images={images} setImages={setImages} />
                 <Seo className={cn({ 'hidden': step != 2 })} next={() => setStep(prev => prev + 1)}
                     prev={() => setStep(prev => prev - 1)} />
+                <Tag className={cn({'hidden':step!=3})} prev={()=>setStep(prev=>prev - 1)} tags={props.tags}/>
             </form>
         </div>
     )

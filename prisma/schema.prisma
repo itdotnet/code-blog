@@ -33,15 +33,7 @@ model Blog {
   typeId          Int
   type            BlogType     @relation(fields: [typeId], references: [id])
   images          BlogImage[]
-  categoryId      Int
-  category        BlogCategory  @relation(fields: [categoryId],references: [id])
   tags            TagsOnBlog[]
-}
-
-model BlogCategory {
-  id   Int    @id @default(autoincrement())
-  name String
-  blog Blog[]
 }
 
 model BlogTag {
