@@ -15,10 +15,13 @@ interface Props {
 }
 
 const Basic = (props: Props) => {
-  const { register, formState: { errors },control } = useFormContext<AddBlogInputType>();
+  const { register, formState: { errors },trigger } = useFormContext<AddBlogInputType>();
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  const handleNext = () => props.next();
+  const handleNext =async () => {
+    if(await trigger(["title","description","status","typeId"]))
+      props.next()
+  };
   const [image, setImage] = useState<File>();
 
   return (
