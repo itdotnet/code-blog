@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const AddPropertyFormSchema=z.object({
+export const AddBlogFormSchema=z.object({
     title:z.string(),
     description:z.string(),
     url:z.string(),
