@@ -51,7 +51,7 @@ const Tag = (props: Props) => {
 
             <div className='flex justify-center gap-3'>
                 <Button color='primary' onClick={props.prev} startContent={<ChevronLeftIcon className='w-6' />}>Previous</Button>
-                <Button color='secondary' endContent={<PlusCircleIcon className='w-6' />}>Submit</Button>
+                <Button type='submit' color='secondary' endContent={<PlusCircleIcon className='w-6' />}>Save</Button>
             </div>
         </Card>
     )

@@ -12,15 +12,20 @@ interface Props
 }
 
 const Seo = (props:Props) => {
-  const { register, formState: { errors } } = useFormContext<AddBlogInputType>();
+  const { register, formState: { errors },trigger } = useFormContext<AddBlogInputType>();
   
+  const handleNext=async()=>{
+    if(await trigger(["url","metaDescription"]))
+      props.next();
+  }
+
   return (
     <Card className={cn('p-2 gap-3',props.className)}>
         <Input label='Url' {...register("url")} errorMessage={errors.url?.message} isInvalid={!!errors.url}/>
         <Textarea label='Meta Description' {...register("metaDescription")} errorMessage={errors.metaDescription?.message} isInvalid={!!errors.metaDescription}/>
         <div className='flex justify-center gap-3'>
             <Button color='primary' className='w-36' onClick={props.prev} startContent={<ChevronLeftIcon className='w-6'/>}>Previous</Button>
-            <Button color='primary' className='w-36' onClick={props.next} endContent={<ChevronRightIcon className='w-6'/>}>Next</Button>
+            <Button color='primary' className='w-36' onClick={handleNext} endContent={<ChevronRightIcon className='w-6'/>}>Next</Button>
         </div>
     </Card>
   )

@@ -12,7 +12,7 @@ const Stepper = (props: Props) => {
     return (
         <div className={cn("p-2 flex items-center justify-around", props.className)}>
             {props.items.map((item, index) => (
-                <>
+                <React.Fragment key={index}>
                     <div className='flex flex-col items-center'>
                         <div className={cn("rounded-full w-6 h-6 flex justify-center items-center text-white transition", {
                             "bg-primary-400": index === props.activeItem,
@@ -29,7 +29,7 @@ const Stepper = (props: Props) => {
                         "after:w-full after:border-primary-400": index < props.activeItem,
                         "after:w-0":index>=props.activeItem
                     })}></div>}
-                </>
+                </React.Fragment>
             ))}
         </div>
     )

@@ -12,6 +12,7 @@ import { z } from 'zod'
 import { AddBlogFormSchema } from '@/app/lib/zodSchema'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { uploadImages } from '@/app/lib/upload'
 
 const steps = [
     {
@@ -45,13 +46,16 @@ const AddTopicForm = (props: Props) => {
 
     const onSubmit:SubmitHandler<AddBlogInputType>=async(data)=>{
         console.log(data);
+
+        const imageUrls=await uploadImages(images);
+        console.log({imageUrls});
     }
 
     return (
         <div>
             <Stepper items={steps} activeItem={step} setActiveItem={setStep} />
             <FormProvider {...methods}>
-                <form className='mt-3 p-2' onSubmit={methods.handleSubmit(onSubmit)}>
+                <form className='mt-3 p-2' onSubmit={methods.handleSubmit(onSubmit,(errors)=>{console.log(errors)})}>
                     <Basic className={cn({ 'hidden': step != 0 })} types={props.types} next={() => setStep(prev => prev + 1)}></Basic>
                     <Picture className={cn({ 'hidden': step != 1 })} next={() => setStep(prev => prev + 1)}
                         prev={() => setStep(prev => prev - 1)} images={images} setImages={setImages} />
