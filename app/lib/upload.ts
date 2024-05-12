@@ -17,14 +17,14 @@ export async function uploadImages(images:File[]) {
     return urls;
 }
 
-export async function uploadAvatar(image:File) {
+export async function uploadAvatar(image:File,buketName:string) {
     const supabaseUrl=process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey=process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
     const supabase=createClient(supabaseUrl,supabaseKey);
 
-    const data=await supabase.storage.from("avatars").upload(`${image.name}_${Date.now()}`,image);
-    const urlData=await supabase.storage.from("avatars").getPublicUrl(data.data?.path!);
+    const data=await supabase.storage.from(buketName).upload(`${image.name}_${Date.now()}`,image);
+    const urlData=await supabase.storage.from(buketName).getPublicUrl(data.data?.path!);
 
     return urlData.data.publicUrl;
 }

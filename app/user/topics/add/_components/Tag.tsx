@@ -7,6 +7,8 @@ interface Props {
     prev: () => void;
     className?: string;
     tags: BlogTag[];
+    selectedTags:number[];
+    setSelectedTags:(tags:number[])=>void;
 }
 
 const Tag = (props: Props) => {
@@ -15,14 +17,17 @@ const Tag = (props: Props) => {
 
     const onSelectionChange = (id: any) => {
         const tag=tags.find(x=>x.id==id);
-        if(tag!=undefined)
+        if(tag!=undefined){
+            props.setSelectedTags([...props.selectedTags,tag.id]);
             setSelectedValues([...selectedValues,tag]);
+        }
         const index = tags.findIndex(x => x.id == id);
         if (index >= 0)
             setTags([...tags.slice(0, index), ...tags.slice(index + 1)]);
     };
 
     const onRemoveTag = (tag: BlogTag,index:number) => {
+        props.setSelectedTags([...props.selectedTags.slice(0, index), ...props.selectedTags.slice(index + 1)]);
         setSelectedValues([...selectedValues.slice(0, index), ...selectedValues.slice(index + 1)]);
         setTags([...tags, tag]);
     }
@@ -42,7 +47,7 @@ const Tag = (props: Props) => {
 
             <div className="flex gap-3 mt-3">
                 {selectedValues.map((tag, index) =>
-                    <div key={tag.id} className='px-3 py-4 bg-blue-600 text-white relative min-w-36 text-center'>
+                    <div key={index} className='px-3 py-4 bg-blue-600 text-white relative min-w-36 text-center'>
                         <Button onClick={() => onRemoveTag(tag,index)} className='bg-transparent absolute -top-2 -left-7'><XMarkIcon className='w-4 text-white' /></Button>
                         <span>{tag.name}</span>
                     </div>

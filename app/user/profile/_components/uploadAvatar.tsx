@@ -41,7 +41,7 @@ const UploadAvatar = ({userId}:{userId:string}) => {
                         return;
                     }
 
-                    const avatarUrl=await uploadAvatar(image);
+                    const avatarUrl=await uploadAvatar(image,"avatars");
                     const result=await updateUserAvatar(avatarUrl,userId);
                     router.refresh();
                     setIsSubmitting(false);

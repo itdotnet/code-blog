@@ -11,7 +11,9 @@ import { AddBlogInputType } from './AddTopicForm';
 interface Props {
   className?: string
   types: BlogType[]
-  next: () => void
+  next: () => void,
+  cover:File | undefined,
+  setCover:(image:File | undefined)=>void
 }
 
 const Basic = (props: Props) => {
@@ -23,7 +25,7 @@ const Basic = (props: Props) => {
     if (await trigger(["title", "description", "status", "typeId"]))
       props.next()
   };
-  const [image, setImage] = useState<File>();
+  //const [image, setImage] = useState<File>();
 
   return (
     <Card className={cn("p-2 grid grid-cols-1 md:grid-cols-3 gap-3", props.className)}>
@@ -73,11 +75,11 @@ const Basic = (props: Props) => {
         <SelectItem key={1} value={1}>{'Release'}</SelectItem>
       </Select>
       <div className='md:col-span-3 flex flex-col'>
-        <FileInput onChange={(e) => setImage((e as any).target.files[0])} lablText='Cover' />
+        <FileInput onChange={(e) => props.setCover((e as any).target.files[0])} lablText='Cover' />
       </div>
-      <Card className={cn("flex flex-col items-center w-40",{"hidden":image==undefined})}>
-          {image && <Image src={URL.createObjectURL(image)} className='w-36 h-36 object-contain' />}
-          <button className='mb-2' onClick={() =>{setImage(undefined);}}>
+      <Card className={cn("flex flex-col items-center w-40",{"hidden":props.cover==undefined})}>
+          {props.cover && <Image src={URL.createObjectURL(props.cover)} className='w-36 h-36 object-contain' />}
+          <button className='mb-2' onClick={() =>{props.setCover(undefined);}}>
             <TrashIcon className='text-danger-400 w-4' />
           </button>
         </Card>

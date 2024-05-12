@@ -7,4 +7,5 @@ export const AddBlogFormSchema=z.object({
     metaDescription:z.string().min(2,'Enter The Url'),
     typeId:z.string().min(1,"Select The Type Of Your Type").transform((data:unknown)=>Number(data)),
     status:z.string().min(1,"Select The Status").transform((data:unknown)=>Boolean(data)),
+    cover:z.string().optional()
 });
