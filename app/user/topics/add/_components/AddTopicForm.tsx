@@ -16,6 +16,7 @@ import { uploadAvatar, uploadImages } from '@/app/lib/upload'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import { saveBlog } from '@/app/lib/actions/blog'
 import { redirect } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 const steps = [
     {
@@ -68,6 +69,7 @@ const AddTopicForm = (props: Props) => {
         console.log({ selectedTags });
         try {
             await saveBlog(data,imageUrls,selectedTags,user?.id!);
+            toast.success('Topic Added!');
             redirect("/user/topics");
         }
         catch (error) {
