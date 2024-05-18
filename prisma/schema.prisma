@@ -33,23 +33,25 @@ model Blog {
   typeId          Int
   type            BlogType     @relation(fields: [typeId], references: [id])
   images          BlogImage[]
-  tags            TagsOnBlog[]
+  tags            BlogTag[]
+  //tags            TagsOnBlog[]
 }
 
 model BlogTag {
   id         Int          @id @default(autoincrement())
   name       String
-  blogs TagsOnBlog[]
+  blogs      Blog[]
+  //blogs TagsOnBlog[]
 }
 
-model TagsOnBlog {
-  blog   Blog    @relation(fields: [blogId], references: [id])
-  blogId Int
-  tag    BlogTag @relation(fields: [tagId], references: [id])
-  tagId  Int
+// model TagsOnBlog {
+//   blog   Blog    @relation(fields: [blogId], references: [id])
+//   blogId Int
+//   tag    BlogTag @relation(fields: [tagId], references: [id])
+//   tagId  Int
 
-  @@id([blogId,tagId])
-}
+//   @@id([blogId,tagId])
+// }
 
 model BlogImage {
   id     Int    @id @default(autoincrement())

@@ -43,7 +43,7 @@ const TopicsTable = ({ topics,totalPages,currentPage }: Props) => {
                             <TableCell>
                                 <div className='flex gap-4 items-center'>
                                     <Tooltip content='Details'>
-                                        <Link href={`/topic/${item.id}`}>
+                                        <Link href={`/topic/${item.id}/${item.url}`}>
                                             <EyeIcon className='w-5 text-slate-500' />
                                         </Link>
                                     </Tooltip>
