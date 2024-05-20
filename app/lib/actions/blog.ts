@@ -1,10 +1,11 @@
 "use server"
 
 import { AddBlogInputType } from "@/app/user/topics/add/_components/AddTopicForm";
-import { Blog } from "@prisma/client";
+import { Blog, BlogTag } from "@prisma/client";
 import prisma from "../prisma";
+import { connect } from "net";
 
-export async function saveBlog(blogData:AddBlogInputType,imagesUrls:string[] | null,tags:number[],userId:string) {
+export async function saveBlog(blogData:AddBlogInputType,imagesUrls:string[] | null,tags:BlogTag[],userId:string) {
     const basic:Omit<Blog,"id">={
         title:blogData.title,
         description:blogData.description,
@@ -25,9 +26,7 @@ export async function saveBlog(blogData:AddBlogInputType,imagesUrls:string[] | n
                 }))
             },
             tags:{
-                create:tags.map(tag=>({
-                    tagId:tag
-                }))
+                connect:tags
             }
         }
     });

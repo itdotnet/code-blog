@@ -47,7 +47,7 @@ const AddTopicForm = (props: Props) => {
 
     const [images, setImages] = useState<File[]>([]);
     const [cover, setCover] = useState<File | undefined>();
-    const [selectedTags, setSelectedTags] = useState<number[]>([]);
+    const [selectedTags, setSelectedTags] = useState<BlogTag[]>([]);
     const [step, setStep] = useState(0);
 
     const { user } = useKindeBrowserClient();

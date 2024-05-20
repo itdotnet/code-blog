@@ -7,19 +7,19 @@ interface Props {
     prev: () => void;
     className?: string;
     tags: BlogTag[];
-    selectedTags:number[];
-    setSelectedTags:(tags:number[])=>void;
+    selectedTags:BlogTag[];
+    setSelectedTags:(tags:BlogTag[])=>void;
 }
 
 const Tag = (props: Props) => {
-    const [selectedValues, setSelectedValues] = React.useState<BlogTag[]>([]);
+    //const [selectedValues, setSelectedValues] = React.useState<BlogTag[]>([]);
     const [tags, setTags] = useState(props.tags);
 
     const onSelectionChange = (id: any) => {
         const tag=tags.find(x=>x.id==id);
         if(tag!=undefined){
-            props.setSelectedTags([...props.selectedTags,tag.id]);
-            setSelectedValues([...selectedValues,tag]);
+            props.setSelectedTags([...props.selectedTags,tag]);
+            //setSelectedValues([...selectedValues,tag]);
         }
         const index = tags.findIndex(x => x.id == id);
         if (index >= 0)
@@ -28,7 +28,7 @@ const Tag = (props: Props) => {
 
     const onRemoveTag = (tag: BlogTag,index:number) => {
         props.setSelectedTags([...props.selectedTags.slice(0, index), ...props.selectedTags.slice(index + 1)]);
-        setSelectedValues([...selectedValues.slice(0, index), ...selectedValues.slice(index + 1)]);
+        //setSelectedValues([...selectedValues.slice(0, index), ...selectedValues.slice(index + 1)]);
         setTags([...tags, tag]);
     }
 
@@ -46,7 +46,7 @@ const Tag = (props: Props) => {
             </Autocomplete>
 
             <div className="flex gap-3 mt-3">
-                {selectedValues.map((tag, index) =>
+                {props.selectedTags.map((tag, index) =>
                     <div key={index} className='px-3 py-4 bg-blue-600 text-white relative min-w-36 text-center'>
                         <Button onClick={() => onRemoveTag(tag,index)} className='bg-transparent absolute -top-2 -left-7'><XMarkIcon className='w-4 text-white' /></Button>
                         <span>{tag.name}</span>
