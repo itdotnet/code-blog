@@ -13,7 +13,7 @@ export async function saveBlog(blogData:AddBlogInputType,imagesUrls:string[] | n
         status:blogData.status,
         metaDescription:blogData.metaDescription,
         userId,
-        cover:blogData.cover!
+        cover:blogData.cover?blogData.cover:null
     };
 
     const result=await prisma.blog.create({
