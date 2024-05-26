@@ -12,12 +12,12 @@ interface Props {
   className?: string
   types: BlogType[]
   next: () => void,
-  cover:File | undefined,
-  setCover:(image:File | undefined)=>void
+  cover: File | undefined,
+  setCover: (image: File | undefined) => void
 }
 
 const Basic = (props: Props) => {
-  const { register, formState: { errors }, trigger, setValue } = useFormContext<AddBlogInputType>();
+  const { register, formState: { errors }, trigger, setValue, getValues } = useFormContext<AddBlogInputType>();
 
 
   const editorRef = useRef<TinyMCEEditor | null>(null);
@@ -25,16 +25,16 @@ const Basic = (props: Props) => {
     if (await trigger(["title", "description", "status", "typeId"]))
       props.next()
   };
-  //const [image, setImage] = useState<File>();
 
   return (
     <Card className={cn("p-2 grid grid-cols-1 md:grid-cols-3 gap-3", props.className)}>
-      <Input {...register("title")} errorMessage={errors.title?.message} isInvalid={!!errors.title} label="Title" className='md:col-span-3' />
+      <Input {...register("title")} errorMessage={errors.title?.message}
+        isInvalid={!!errors.title} label="Title" className='md:col-span-3' defaultValue={getValues().title} />
       <div className='md:col-span-3'>
         <Editor
           apiKey='k6phizol048u0brh9q5tx0xp2wcs0sxfp7vp160roa9s3odb'
           onInit={(_evt, editor) => editorRef.current = editor}
-          initialValue=""
+          initialValue={getValues().description}
           onEditorChange={(newValue) =>
             setValue("description", newValue)
           }
@@ -58,6 +58,7 @@ const Basic = (props: Props) => {
           {...register("description")}
           errorMessage={errors.description?.message}
           isInvalid={!!errors.description}
+          defaultValue={getValues().description}
         />
         {errors.description?.message && (
           <p className='mt-2 text-sm text-red-400'>
@@ -65,24 +66,35 @@ const Basic = (props: Props) => {
           </p>
         )}
       </div>
-      <Select label="Type" selectionMode='single' {...register("typeId")} errorMessage={errors.typeId?.message} isInvalid={!!errors.typeId}>
+      <Select label="Type" selectionMode='single' {...register("typeId")}
+        errorMessage={errors.typeId?.message} isInvalid={!!errors.typeId}
+        defaultSelectedKeys={[getValues().typeId?.toString()]}
+      >
         {props.types.map((item) => (
           <SelectItem key={item.id} value={item.value}>{item.value}</SelectItem>
         ))}
       </Select>
-      <Select label="Status" selectionMode='single' {...register("status")} errorMessage={errors.status?.message} isInvalid={!!errors.status}>
+      <Select label="Status" selectionMode='single'
+        {...register("status")} errorMessage={errors.status?.message} isInvalid={!!errors.status}
+        defaultSelectedKeys={[getValues().status===true ? "1" : getValues().status===false?"0":""]}>
         <SelectItem key={0} value={0}>{'Draft'}</SelectItem>
         <SelectItem key={1} value={1}>{'Release'}</SelectItem>
       </Select>
       <div className='md:col-span-3 flex flex-col'>
         <FileInput onChange={(e) => props.setCover((e as any).target.files[0])} lablText='Cover' />
       </div>
-      <Card className={cn("flex flex-col items-center w-40",{"hidden":props.cover==undefined})}>
-          {props.cover && <Image src={URL.createObjectURL(props.cover)} className='w-36 h-36 object-contain' />}
-          <button className='mb-2' onClick={() =>{props.setCover(undefined);}}>
-            <TrashIcon className='text-danger-400 w-4' />
-          </button>
-        </Card>
+      <Card className={cn("flex flex-col items-center w-40", { "hidden": props.cover == undefined })}>
+        {props.cover && <Image src={URL.createObjectURL(props.cover)} className='w-36 h-36 object-contain' />}
+        <button className='mb-2' onClick={() => { props.setCover(undefined); }}>
+          <TrashIcon className='text-danger-400 w-4' />
+        </button>
+      </Card>
+      <Card className={cn("flex flex-col items-center w-40", { "hidden": getValues().cover == undefined })}>
+        {props.cover && <Image src={getValues().cover} className='w-36 h-36 object-contain' />}
+        <button className='mb-2' onClick={() => { setValue("cover", undefined); }}>
+          <TrashIcon className='text-danger-400 w-4' />
+        </button>
+      </Card>
       <div className='flex justify-center col-span-3 gap-3'>
         <Button isDisabled color='primary' className='w-36' startContent={<ChevronLeftIcon className='w-6' />}>Previous</Button>
         <Button color='primary' className='w-36' endContent={<ChevronRightIcon className='w-6' />} onClick={handleNext}>Next</Button>

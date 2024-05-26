@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Stepper from './Stepper'
 import { Button, cn } from '@nextui-org/react'
 import Basic from './basic'
-import { BlogTag, BlogType } from '@prisma/client'
+import { BlogTag, BlogType, Prisma } from '@prisma/client'
 import Picture from './Picture'
 import Seo from './Seo'
 import Tag from './Tag'
@@ -36,13 +36,29 @@ const steps = [
 interface Props {
     types: BlogType[];
     tags: BlogTag[];
+    topic?:Prisma.BlogGetPayload<{
+        include:{
+            tags:true,
+            images:true
+        }
+    }>;
+    isEdit?:boolean
 }
 
 export type AddBlogInputType = z.infer<typeof AddBlogFormSchema>;
 
-const AddTopicForm = (props: Props) => {
+const AddTopicForm = ({isEdit=false,...props}: Props) => {
     const methods = useForm<AddBlogInputType>({
-        resolver: zodResolver(AddBlogFormSchema)
+        resolver: zodResolver(AddBlogFormSchema),
+        defaultValues:{
+            title:props.topic?.title??undefined,
+            description:props.topic?.description??undefined,
+            url:props.topic?.url??undefined,
+            metaDescription:props.topic?.metaDescription??undefined,
+            typeId:props.topic?.typeId??undefined,
+            status:props.topic?.status??undefined,
+            cover:props.topic?.cover??undefined
+        }
     })
 
     const [images, setImages] = useState<File[]>([]);

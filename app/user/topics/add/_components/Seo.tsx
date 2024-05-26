@@ -12,7 +12,7 @@ interface Props
 }
 
 const Seo = (props:Props) => {
-  const { register, formState: { errors },trigger } = useFormContext<AddBlogInputType>();
+  const { register, formState: { errors },trigger,getValues } = useFormContext<AddBlogInputType>();
   
   const handleNext=async()=>{
     if(await trigger(["url","metaDescription"]))
@@ -21,8 +21,10 @@ const Seo = (props:Props) => {
 
   return (
     <Card className={cn('p-2 gap-3',props.className)}>
-        <Input label='Url' {...register("url")} errorMessage={errors.url?.message} isInvalid={!!errors.url}/>
-        <Textarea label='Meta Description' {...register("metaDescription")} errorMessage={errors.metaDescription?.message} isInvalid={!!errors.metaDescription}/>
+        <Input label='Url' {...register("url")} errorMessage={errors.url?.message} isInvalid={!!errors.url}
+          defaultValue={getValues().url}/>
+        <Textarea label='Meta Description' {...register("metaDescription")} errorMessage={errors.metaDescription?.message} isInvalid={!!errors.metaDescription}
+          defaultValue={getValues().metaDescription}/>
         <div className='flex justify-center gap-3'>
             <Button color='primary' className='w-36' onClick={props.prev} startContent={<ChevronLeftIcon className='w-6'/>}>Previous</Button>
             <Button color='primary' className='w-36' onClick={handleNext} endContent={<ChevronRightIcon className='w-6'/>}>Next</Button>
