@@ -14,8 +14,8 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { uploadAvatar, uploadImages } from '@/app/lib/upload'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { saveBlog } from '@/app/lib/actions/blog'
-import { redirect } from 'next/navigation'
+import { editBlog, saveBlog } from '@/app/lib/actions/blog'
+import { redirect, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 const steps = [
@@ -48,6 +48,8 @@ interface Props {
 export type AddBlogInputType = z.infer<typeof AddBlogFormSchema>;
 
 const AddTopicForm = ({ isEdit = false, ...props }: Props) => {
+    const router=useRouter();
+
     const methods = useForm<AddBlogInputType>({
         resolver: zodResolver(AddBlogFormSchema),
         defaultValues: {
@@ -70,8 +72,6 @@ const AddTopicForm = ({ isEdit = false, ...props }: Props) => {
 
     const { user } = useKindeBrowserClient();
     const onSubmit: SubmitHandler<AddBlogInputType> = async (data) => {
-        console.log({ data });
-
         if (cover) {
             const coverUrl = await uploadAvatar(cover!, "blogCover");
             data.cover = coverUrl;
@@ -86,18 +86,23 @@ const AddTopicForm = ({ isEdit = false, ...props }: Props) => {
 
         console.log({ selectedTags });
         try {
-            if (isEdit) {
+            if (isEdit && props.topic) {
                 const deleteImageIds=props.topic?.images.filter(item=>!savedImagesUrl.includes(item)).map(x=>x.id);
-                
+                const deleteTagIds=props.topic?.tags.filter(item=>!savedTags.includes(item)).map(x=>x.id);
+
+                await editBlog(props.topic?.id,data,imageUrls,deleteImageIds,selectedTags,deleteTagIds);
+                toast.success('Topic Updated!');
             }
             else {
                 await saveBlog(data, imageUrls, selectedTags, user?.id!);
                 toast.success('Topic Added!');
             }
-            redirect("/user/topics");
         }
         catch (error) {
             console.error({ error });
+        }
+        finally{
+            router.push("/user/topics");
         }
     }
 
