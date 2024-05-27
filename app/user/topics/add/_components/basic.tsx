@@ -19,7 +19,6 @@ interface Props {
 const Basic = (props: Props) => {
   const { register, formState: { errors }, trigger, setValue, getValues } = useFormContext<AddBlogInputType>();
 
-
   const editorRef = useRef<TinyMCEEditor | null>(null);
   const handleNext = async () => {
     if (await trigger(["title", "description", "status", "typeId"]))
@@ -68,10 +67,10 @@ const Basic = (props: Props) => {
       </div>
       <Select label="Type" selectionMode='single' {...register("typeId")}
         errorMessage={errors.typeId?.message} isInvalid={!!errors.typeId}
-        defaultSelectedKeys={[getValues().typeId?.toString()]}
+        defaultSelectedKeys={[getValues().typeId.toString()]}
       >
         {props.types.map((item) => (
-          <SelectItem key={item.id} value={item.value}>{item.value}</SelectItem>
+          <SelectItem key={item.id} value={item.id}>{item.value}</SelectItem>
         ))}
       </Select>
       <Select label="Status" selectionMode='single'
@@ -84,13 +83,13 @@ const Basic = (props: Props) => {
         <FileInput onChange={(e) => props.setCover((e as any).target.files[0])} lablText='Cover' />
       </div>
       <Card className={cn("flex flex-col items-center w-40", { "hidden": props.cover == undefined })}>
-        {props.cover && <Image src={URL.createObjectURL(props.cover)} className='w-36 h-36 object-contain' />}
+        {props.cover!! && <Image src={URL.createObjectURL(props.cover)} className='w-36 h-36 object-contain' />}
         <button className='mb-2' onClick={() => { props.setCover(undefined); }}>
           <TrashIcon className='text-danger-400 w-4' />
         </button>
       </Card>
       <Card className={cn("flex flex-col items-center w-40", { "hidden": getValues().cover == undefined })}>
-        {props.cover && <Image src={getValues().cover} className='w-36 h-36 object-contain' />}
+        {getValues().cover!! && <Image src={getValues().cover} className='w-36 h-36 object-contain' />}
         <button className='mb-2' onClick={() => { setValue("cover", undefined); }}>
           <TrashIcon className='text-danger-400 w-4' />
         </button>

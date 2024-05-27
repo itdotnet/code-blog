@@ -34,3 +34,31 @@ export async function saveBlog(blogData:AddBlogInputType,imagesUrls:string[] | n
     console.log({result});
     return result;
 }
+
+export async function editBlog(topicId:number,blogData:AddBlogInputType,newImagesUrls:string[] | null,deletedImageIds:number[],newTags:BlogTag[],deleteTagIds:number[]) {
+    const result=await prisma.blog.update({
+        where:{
+            id:topicId
+        },
+        data:{
+            title:blogData.title,
+            description:blogData.description,
+            url:blogData.url,
+            metaDescription:blogData.metaDescription,
+            cover:blogData.cover,
+            typeId:blogData.typeId,
+            status:blogData.status,
+            images:{
+                create:newImagesUrls?.map(img=>({url:img})),
+                deleteMany:{id:{in:deletedImageIds}}
+            },
+            tags:{
+                connect:newTags,
+                disconnect:deleteTagIds.map(item=>({id:item}))
+            }
+        }
+    });
+
+    console.log({result});
+    return result;
+}
