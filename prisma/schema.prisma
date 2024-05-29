@@ -57,7 +57,7 @@ model BlogImage {
   id     Int    @id @default(autoincrement())
   url    String
   blogId Int
-  blog   Blog   @relation(fields: [blogId], references: [id])
+  blog   Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
 }
 
 model BlogType {

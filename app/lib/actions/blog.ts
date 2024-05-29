@@ -62,3 +62,13 @@ export async function editBlog(topicId:number,blogData:AddBlogInputType,newImage
     console.log({result});
     return result;
 }
+
+export async function deleteBlog(id:number) {
+    const topic=await prisma.blog.delete({
+        where:{
+            id
+        }
+    });
+
+    return topic;
+}
