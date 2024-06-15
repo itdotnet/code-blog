@@ -21,7 +21,7 @@ model User {
 }
 
 model Blog {
-  id              Int          @id @default(autoincrement())
+  id              Int         @id @default(autoincrement())
   title           String
   description     String
   url             String
@@ -29,39 +29,37 @@ model Blog {
   cover           String?
   status          Boolean
   userId          String
-  user            User         @relation(fields: [userId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
   typeId          Int
-  type            BlogType     @relation(fields: [typeId], references: [id])
+  type            BlogType    @relation(fields: [typeId], references: [id])
   images          BlogImage[]
   tags            BlogTag[]
-  //tags            TagsOnBlog[]
 }
 
 model BlogTag {
-  id         Int          @id @default(autoincrement())
-  name       String
-  blogs      Blog[]
-  //blogs TagsOnBlog[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  blogs Blog[]
 }
-
-// model TagsOnBlog {
-//   blog   Blog    @relation(fields: [blogId], references: [id])
-//   blogId Int
-//   tag    BlogTag @relation(fields: [tagId], references: [id])
-//   tagId  Int
-
-//   @@id([blogId,tagId])
-// }
 
 model BlogImage {
   id     Int    @id @default(autoincrement())
   url    String
   blogId Int
-  blog   Blog   @relation(fields: [blogId], references: [id],onDelete: Cascade)
+  blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
 }
 
 model BlogType {
   id    Int    @id @default(autoincrement())
   value String
   Blog  Blog[]
+}
+
+model SubscriptionPlan {
+  id                    Int    @id @default(autoincrement())
+  name                  String
+  price                 Float
+  topicLimit            Int
+  imagePerTopicLimit Int
+  features              String
 }

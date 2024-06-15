@@ -1,7 +1,7 @@
 import PageTitle from '@/app/components/pageTitle';
 import { getUserById } from '@/app/lib/actions/user';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-import { Avatar, Card } from '@nextui-org/react';
+import { Avatar, Button, Card, Link } from '@nextui-org/react';
 import React, { ReactNode } from 'react'
 import SectionTitle from './_components/sectionTitle';
 import UploadAvatar from './_components/uploadAvatar';
@@ -31,6 +31,13 @@ const ProfilePage = async () => {
                     <Attribute title='Registered On' value={dbUser?.createdAt.toLocaleDateString()} />
                     <Attribute title='Properties Posted' value={1} />
                 </div>
+            </Card>
+
+            <Card className='m-4 p-4 flex flex-col gap-5'>
+                <SectionTitle title="Subscription Details"/>
+                <Link href={"/User/subscription"}>
+                    <Button>Purchase Your Subscription</Button>
+                </Link>
             </Card>
         </div>
     )

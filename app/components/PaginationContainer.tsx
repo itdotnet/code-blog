@@ -12,7 +12,7 @@ interface Props {
 
 const PaginationContainer = ({ totalPages, currentPage, route='/' }: Props) => {
     const router = useRouter();
-    if (totalPages == 1) return null;
+    if (totalPages <= 1) return null;
 
     return <Pagination total={totalPages} initialPage={1} page={currentPage} 
         onChange={(page) =>router.push(`${route}?pagenum=${page}`)} />
