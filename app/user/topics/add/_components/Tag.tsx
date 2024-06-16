@@ -39,7 +39,7 @@ const Tag = (props: Props) => {
 
     const onRemoveTagFromSavedTag = (tag: BlogTag, index: number) => {
         props.setSavedTags!([...props.savedTags!.slice(0, index), ...props.savedTags!.slice(index + 1)]);
-        setTags([...tags, tag]);
+        setTags([...tags, tag]); 
     }
 
 
