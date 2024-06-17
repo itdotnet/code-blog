@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id
-  firstName String
-  lastName  String
-  email     String
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  Blog      Blog[]
+  id            String          @id
+  firstName     String
+  lastName      String
+  email         String
+  avatarUrl     String?
+  createdAt     DateTime        @default(now())
+  Blog          Blog[]
+  Subscriptions Subscriptions[]
 }
 
 model Blog {
@@ -56,10 +57,22 @@ model BlogType {
 }
 
 model SubscriptionPlan {
-  id                    Int    @id @default(autoincrement())
-  name                  String
-  price                 Float
-  topicLimit            Int
+  id                 Int             @id @default(autoincrement())
+  name               String
+  price              Float
+  topicLimit         Int
   imagePerTopicLimit Int
-  features              String
+  features           String
+  Subscriptions      Subscriptions[]
+}
+
+model Subscriptions {
+  id        Int              @id @default(autoincrement())
+  paymentId String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  planId    Int
+  plan      SubscriptionPlan @relation(fields: [planId], references: [id])
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
 }

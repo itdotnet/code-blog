@@ -5,12 +5,20 @@ import { Avatar, Button, Card, Link } from '@nextui-org/react';
 import React, { ReactNode } from 'react'
 import SectionTitle from './_components/sectionTitle';
 import UploadAvatar from './_components/uploadAvatar';
+import prisma from '@/app/lib/prisma';
 
 const ProfilePage = async () => {
     const { getUser } = await getKindeServerSession();
 
     const user = await getUser();
     const dbUser = await getUserById(user ? user.id : "");
+    const userSubscription=await prisma.subscriptions.findFirst({
+        where:{
+            userId:dbUser?.id
+        },
+        include:{plan:true},
+        orderBy:{createdAt:"desc"}
+    });
 
     return (
         <div>
@@ -35,8 +43,19 @@ const ProfilePage = async () => {
 
             <Card className='m-4 p-4 flex flex-col gap-5'>
                 <SectionTitle title="Subscription Details"/>
-                <Link href={"/User/subscription"}>
-                    <Button>Purchase Your Subscription</Button>
+                {userSubscription?(
+                    <div>
+                        <Attribute title='Plan' value={userSubscription.plan.name}/>
+                        <Attribute title='Price' value={userSubscription.plan.price}/>
+                        <Attribute title='Purchase On' value={userSubscription.createdAt.toLocaleDateString()}/>
+                    </div>
+                ):(
+                    <div className='flex flex-col items-center'>
+                        <p className='text-center'>No Subscription Found!</p>
+                    </div>
+                )}
+                <Link href={"/user/subscription"}>
+                    <Button color='primary'>Purchase Your Subscription</Button>
                 </Link>
             </Card>
         </div>
